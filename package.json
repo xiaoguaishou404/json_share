@@ -17,11 +17,19 @@
     "@nuxt/image": "^1.10.0",
     "@nuxt/scripts": "^0.11.6",
     "@nuxt/ui": "^3.1.2",
+    "@pinia/nuxt": "^0.5.1",
+    "@tailwindcss/vite": "^4.1.7",
+    "@types/uuid": "^9.0.8",
     "@unhead/vue": "^2.0.8",
+    "dayjs": "^1.11.10",
     "eslint": "^9.26.0",
     "nuxt": "^3.17.3",
+    "pinia": "^2.1.7",
+    "tailwindcss": "^4.1.7",
     "typescript": "^5.8.3",
+    "uuid": "^9.0.1",
     "vue": "^3.5.13",
+    "vue-json-pretty": "^2.3.0",
     "vue-router": "^4.5.1"
   }
 }
