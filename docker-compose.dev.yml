@@ -4,13 +4,9 @@ services:
   mysql:
     image: mysql:8.0
     container_name: json_share_mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: json_share
-      MYSQL_USER: json_share_user
-      MYSQL_PASSWORD: json_share_password
+    env_file: .env
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT}:3306"
     volumes:
       - ./.data/mysql:/var/lib/mysql
       - ./mysql-init:/docker-entrypoint-initdb.d
@@ -22,15 +18,16 @@ services:
       retries: 5
 
   app:
-    build: .
-    container_name: json_share_app
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: json_share_app_dev
+    env_file: .env
     ports:
-      - "3000:3000"
-    environment:
-      - MYSQL_HOST=mysql
-      - MYSQL_USER=json_share_user
-      - MYSQL_PASSWORD=json_share_password
-      - MYSQL_DATABASE=json_share
+      - "${NUXT_PORT}:3000"
+    volumes:
+      - ./:/app
+      - /app/node_modules
     depends_on:
       mysql:
         condition: service_healthy 

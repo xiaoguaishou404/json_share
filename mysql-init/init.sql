@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS json_share;
-USE json_share;
-
 CREATE TABLE IF NOT EXISTS shares (
     id VARCHAR(36) PRIMARY KEY,
     user_id VARCHAR(36) NOT NULL,

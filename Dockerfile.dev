@@ -1,0 +1,25 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# 使用非root用户运行（使用动态GID）
+RUN addgroup -S nuxt && \
+    adduser -S -G nuxt -s /bin/sh nuxt
+
+# 复制package.json和package-lock.json
+COPY package*.json ./
+RUN npm install
+
+# 将所有权限授予nuxt用户
+RUN chown -R nuxt:nuxt /app
+
+# 切换到nuxt用户
+USER nuxt
+
+# 在运行时，将通过volume挂载源代码，因此不需要在镜像中复制代码
+
+# 暴露端口
+EXPOSE 3000
+
+# 启动开发服务器
+CMD ["npm", "run", "dev"] 
