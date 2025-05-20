@@ -53,10 +53,40 @@ jobs:
             # 确保mysql-init目录存在并下载初始化脚本
             mkdir -p mysql-init
             curl -o mysql-init/init.sql https://raw.githubusercontent.com/${{ github.repository }}/main/mysql-init/init.sql
+          
+
+            # 创建并下载 Nginx 配置
+            sudo mkdir -p nginx/conf.d
+            sudo chown -R $USER:$USER nginx
+            curl -o nginx/conf.d/default.conf https://raw.githubusercontent.com/${{ github.repository }}/main/nginx/conf.d/default.conf
+            sudo chmod 644 nginx/conf.d/default.conf
+            
+            # 检查必要文件是否存在
+            echo "检查必要文件..."
+            if [ ! -f "docker-compose.prod.yml" ]; then
+              echo "错误: docker-compose.prod.yml 文件不存在"
+              exit 1
+            fi
+            
+            if [ ! -f "mysql-init/init.sql" ]; then
+              echo "错误: mysql-init/init.sql 文件不存在"
+              exit 1
+            fi
+            
+            if [ ! -f "nginx/conf.d/default.conf" ]; then
+              echo "错误: nginx/conf.d/default.conf 文件不存在"
+              exit 1
+            fi
+            
+            if [ ! -f ".env" ]; then
+              echo "错误: .env 文件不存在"
+              exit 1
+            fi
+            
+            echo "所有必要文件检查通过"
             
             # 拉取最新的Docker镜像
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/json_share:latest
-
             
             # 重启服务
             sudo docker-compose -f docker-compose.prod.yml down
