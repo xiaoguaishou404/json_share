@@ -18,11 +18,14 @@
         </div>
 
         <vue-json-pretty
+          :height="600"
+          :virtual="true"
           :data="jsonContent"
-          :deep="5"
-          :show-double-quotes="true"
           :show-length="true"
-          class="border rounded p-4"
+          :show-line-number="true"
+          :collapsed-on-click-brackets="true"
+          theme="light"
+          class="border rounded p-4 max-h-[600px] overflow-auto"
         />
 
         <div class="mt-6">

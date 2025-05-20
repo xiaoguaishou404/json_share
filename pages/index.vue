@@ -20,11 +20,14 @@
           预览
         </label>
         <vue-json-pretty
+          :height="600"
+          :virtual="true"
           :data="jsonContent"
-          :deep="2"
-          :show-double-quotes="true"
           :show-length="true"
-          class="border rounded p-4"
+          :show-line-number="true"
+          :collapsed-on-click-brackets="true"
+          theme="light"
+          class="border rounded p-4 max-h-[600px] overflow-auto"
         />
       </div>
 
@@ -82,9 +85,18 @@ const expiration = ref('7')
 const shareLink = ref('')
 const userStore = useUserStore()
 
+
 const handleFileChange = async (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
+
+  // 检查文件大小（50MB限制）
+  const maxSize = 50 * 1024 * 1024 // 50MB in bytes
+  if (file.size > maxSize) {
+    alert('文件大小不能超过50MB')
+    ;(event.target as HTMLInputElement).value = ''
+    return
+  }
 
   try {
     const text = await file.text()
@@ -110,6 +122,11 @@ const handleUpload = async () => {
         expiration: parseInt(expiration.value)
       })
     })
+
+    if (response.status === 413) {
+      alert('文件太大，请上传小于50MB的文件')
+      return
+    }
 
     const data = await response.json()
     if (data.success) {
