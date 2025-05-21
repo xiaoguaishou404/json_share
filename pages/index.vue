@@ -23,6 +23,8 @@
           :height="600"
           :virtual="true"
           :data="jsonContent"
+          :item-height="30"
+          :show-icon="true"
           :show-length="true"
           :show-line-number="true"
           :collapsed-on-click-brackets="true"
