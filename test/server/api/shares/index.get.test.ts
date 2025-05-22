@@ -54,7 +54,11 @@ describe('GET /api/shares', () => {
     // 验证
     expect(response).toEqual({
       success: true,
-      shares: mockShares
+      shares: mockShares.map(share => ({
+        id: share.id,
+        createdAt: share.created_at,
+        expirationDate: share.expiration_date
+      }))
     })
     
     expect(db.execute).toHaveBeenCalledWith(

@@ -19,7 +19,11 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      shares: rows
+      shares: (rows as any[]).map(row => ({
+        id: row.id,
+        createdAt: row.created_at,
+        expirationDate: row.expiration_date
+      }))
     }
   } catch (error) {
     console.error('获取分享列表失败:', error)
