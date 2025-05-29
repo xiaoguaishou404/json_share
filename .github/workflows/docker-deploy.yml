@@ -79,6 +79,13 @@ jobs:
             curl -o nginx/conf.d/default.conf https://raw.githubusercontent.com/${{ github.repository }}/main/nginx/conf.d/default.conf
             sudo chmod 644 nginx/conf.d/default.conf
             
+            # 创建SSL目录并设置SSL证书
+            mkdir -p ssl
+            echo "${{ secrets.SSL_CERTIFICATE }}" > ssl/certificate.crt
+            echo "${{ secrets.SSL_PRIVATE_KEY }}" > ssl/private.key
+            chmod 644 ssl/certificate.crt
+            chmod 600 ssl/private.key
+            
             # 检查必要文件是否存在
             echo "检查必要文件..."
             if [ ! -f "docker-compose.prod.yml" ]; then
@@ -98,6 +105,16 @@ jobs:
             
             if [ ! -f ".env" ]; then
               echo "错误: .env 文件不存在"
+              exit 1
+            fi
+            
+            if [ ! -f "ssl/certificate.crt" ]; then
+              echo "错误: SSL证书文件不存在"
+              exit 1
+            fi
+            
+            if [ ! -f "ssl/private.key" ]; then
+              echo "错误: SSL私钥文件不存在"
               exit 1
             fi
             
